@@ -37,7 +37,7 @@
   <div id="client-side" class="step">
     <h3>自动化测试产生的目的</h3>
     <p class="substep">显而易见:</p>
-    <p class="substep">我们需要更快的开发软件 (<b>Automation Testing</b>)</p>
+    <p class="substep">我们需要更快的开发软件 (<b>using Automation Testing</b>)</p>
     <p class="substep">我们不需要每次都靠人验证重复的功能点</p>
     <p class="substep">机器可靠又准确</p>
   </div>
@@ -63,148 +63,89 @@
 
   <div id="how-much-waiting-can-cost" class="step">
     <h3>自动化测试包含的理念 ？</h3>
-    <p>I/O latency:</p>
+    <p>高效，重复，维护</p>
     <ul>
-      <li>L1: 3 cycles</li>
-      <li>L2: 14 cycles</li>
-      <li>RAM: 250 cycles</li>
-      <li>DISK: 41,000,000 cycles</li>
-      <li>NETWORK: 240,000,000 cycles</li>
+      <li>开发效率大于执行效率</li>
+      <li>可复用性</li>
+      <li>可维护性</li>
+      <li>技术选型只有更合适，没有最优</li>
     </ul>
   </div>
 
   <div id="better-software-can-multitask" class="step">
-    <h3>Better software can multitask</h3>
+    <h3>自动化测试技术选型</h3>
     <div class="substep">
-      <p>Code like this:</p>
-      <pre><code>var result = db.query("select * from T");
-// use result</code></pre>
-      <p>blocks entire process</p>
+      <p>动态语言优先：我们选择了Ruby作为主要开发语言，代码简洁，易于上手，表达能力强</p>
+      <pre><code>File.open("test.txt","w") { |f| f.puts("hello world")  }</code></pre>
+      <p>将 "hello world" 写入一个文件</p>
     </div>
     <div class="substep">
-      <p style="margin-top:0.9em">But code like this:</p>
-      <pre><code>db.query("select..", function (result) {
-  // use result
-});</code></pre>
-      <p>Allows the program to return to the
-        event loop immediately.</p>
+      <p style="margin-top:0.9em">计算1到100的和</p>
+      <pre><code>(1..100).inject(&:+)</code></pre>
+      <p>将 1加到100，利用inject的代码块进行调用，可见直观简洁</p>
     </div>
   </div>
 
   <div id="how-io-should-be-done" class="step">
-    <p>This is how I/O should be done, and this is what was introduced with Node.js</p>
+    <h3>自动化测试技术选型(2)</h3>
     <div class="substep">
-      <p>For more details on that see:</p>
-      <p class="p-a"><a href="http://s3.amazonaws.com/four.livejournal/20091117/jsconf.pdf">Node.js introductory JSConf 2009 slides</a></p>
+    <p>只选合适的，我们也使用C/C++/BASH/TCL等做自动化</p>
+    </div>
+    <div class="substep">
+      <li>LR的脚本开发，使用LR-Like的C接口</li>
+      <li>UI自动化，我们使用<strong><a href="http://watir.com">Watir</a></strong>库，Ruby语言</li>
+      <li>Mips与TestCenter自动化控制，我们使用<strong>TCL</strong>脚本</li>
+      <li>控制我们设备后台，我们使用<strong>net-ssh</strong>并封装接口</li>
+      <li>模拟用户登录，配置参数，我们使用<strong>patron</strong>库</li>
     </div>
   </div>
 
   <div id="how-to-write-asynchronous-code" class="step">
-    <h3 class="lone">How to write asynchronous code ?</h3>
+    <h3 class="lone">怎么去选择 ?</h3>
   </div>
 
   <div id="nodejs-convention" class="step">
-    <p>Node.js introduced the following convention:</p>
-    <pre><code>readFile(filename, function (err, content) {
-  if (err) {
-    // handle error
-    return;
-  }
-  // process file content
-});</code></pre>
-    <div class="substep">
-      <p>Currently this style has also its recommendation in:</p>
-      <p class="p-a"><a href="https://github.com/scriptlib-cg/api-design-cookbook">
-          W3C Web API Design Cookbook</a></p>
-    </div>
+    <p>快速开发</p>
   </div>
 
   <div id="exercise" class="step">
-    <h3>Let's do a simple real world exercise</h3>
-    <p class="substep" data-order="0"><q>Concatenate all js files in given directory to lib.js file</q></p>
-    <div class="substep" data-order="1">
-      <p>Thinking synchronous it may look like this:</p>
-      <pre><code><span class="substep" data-order="6">writeFile(dirname + '/lib.js',</span>
-<span class="substep" data-order="2">  // Read all filenames
-  readdir(dirname) // returns array of filenames</span>
-<span class="substep" data-order="3">  // Filter *.js filenames
-  .filter(function (filename) {
-    return (filename.slice(-3) === '.js')
-      && (filename !== 'lib.js');
-  })</span>
-<span class="substep" data-order="4">  // Read content of each file
-  .map(readFile)</span>
-<span class="substep" data-order="5">  // Concatenate into one string
-  .join("\n")</span>
-<span class="substep" data-order="6">);</span></code></pre>
-    </div>
+    <p><q>与被测系统技术相符</q></p>
   </div>
 
   <div id="exercise-nodejs" class="step">
-    <h3>Let's do it asynchronous in Node.js</h3>
-    <pre style="font-size:0.35em;" class="substep"><code>// Read all filenames in given path
-readdir(dirname, function (err, filenames) {
-  var result, waiting;
-  if (err) {
-    // Handle eventual error
-    return;
-  }
-  // Filter *.js filenames
-  filenames = files.filter(function (filename) {
-    return (filename.slice(-3) === '.js') && (filename !== 'lib.js');
-  });
-  // Read content of each file
-  waiting = 0;
-  result = [];
-  filenames.forEach(function (filename, index) {
-    ++waiting;
-    readFile(filename, 'utf8', function (err, content) {
-      if (err) {
-        // Handle eventual error
-        return;
-      }
-      result[index] = content;
-      if (!--waiting) {
-        // Got content of all files, concatenate and write into lib.js
-        writeFile(dirname + '/lib.js', result.join("\n"), function (err) {
-          if (err) {
-            // Handle eventual error
-            return;
-          }
-        });
-      }
-    });
-  });
-});</code></pre>
+    <h3>选择开源，成熟稳定</h3>
   </div>
 
   <div id="exercise-node-comment" class="step">
-    <p>Looks definitely more complicated</p>
-    <p class="substep">it's still a simple example, <b>real world cases are usually more complicated than that</b></p>
-    <p class="substep">Many developers have reached this point and as a result we have many solutions that aim to be remedy for asynchronous programming</p>
+    <p>没有最好的，只有最合适的</p>
+    <ul>
+      <li>投入产出</li>
+      <li>可测试性</li>
+      <li>折中选择</li>
+    </ul>
   </div>
 
   <div id="most-popular-solutions" class="step">
-    <h3>Most popular solutions:</h3>
+    <h3>Sangfor自动化成熟方案介绍：</h3>
     <ul>
-      <li class="substep" data-order="0">Async - <a href="https://github.com/caolan/async">github.com/caolan/async</a></li>
-      <li class="substep" data-order="1">Step - <a href="https://github.com/creationix/step">github.com/creationix/step</a></li>
-      <li class="substep" data-order="2">Q <small>(promises)</small> - <a href="https://github.com/kriskowal/q">github.com/kriskowal/q</a></li>
-      <li class="substep" data-order="3">Seq - <a href="https://github.com/substack/node-seq">github.com/substack/node-seq</a></li>
-      <li class="substep" data-order="4">Futures <small>(promises alike)</small> - <a href="https://github.com/coolaj86/futures">github.com/coolaj86/futures</a></li>
+      <li class="substep" data-order="0">AC_BVT 自动化技术分析 <a href="http://windy.github.com">svn</a></li>
+      <li class="substep" data-order="1">SSLWeb自动化技术分析 <a href="http://windy.github.com">svn</a></li>
+      <li class="substep" data-order="2">AC_GUI自动化技术分析 <a href="http://windy.github.com">svn</a></li>
+      <li class="substep" data-order="3">Apm2.0bvt自动化技术分析 <a href="http://windy.github.com">svn</a></li>
+      <li class="substep" data-order="4">其他常见技术整合 <a href="http://windy.github.com">svn</a></li>
       <li class="empty substep" data-order="5"><a>...</a></li>
-      <li class="substep" data-order="5">deferred <small>(promises)</small> - <a href="https://github.com/medikoo/deferred">github.com/medikoo/deferred</a></li>
+      <li class="substep" data-order="5">Sangfor自动化测试框架介绍</li>
     </ul>
   </div>
 
   <div id="it-can-be-done-better-than-that" class="step smaller">
-    <p>Most solutions just try to simplify callbacks, but it still forces us into continuation passing style</p>
-    <p class="substep"><b>It can be done better than that</b></p>
-    <p class="substep">Instead of encapsulating <i>waiting</i> state within one function call, we can return such state as an object</p>
-    <p class="substep"><b>With the deferred/promise approach an asynchronous function returns a promise object, which is a promise of a value to be obtained</b></p>
-    <p class="substep">Promise can be processed by many functions.</p>
-    <p class="substep">It can be chained to other promises or nested with further promise values</p>
-    <p class="substep"><b>With promises we receive a much more powerful abstraction of asynchronous programming</b></p>
+    <h3>AC_BVT 自动化技术分析</h3>
+    <p class="substep"><b>ATT框架：关键字驱动，便于开发与维护，ATM平台，便于管理与结果分析</b></p>
+    <p class="substep">Watir</p>
+    <p class="substep"><b>Patron</b></p>
+    <p class="substep">AutoIT</p>
+    <p class="substep"></p>
+    <p class="substep"><b></b></p>
   </div>
 
   <div id="deferred-promise" class="step">
