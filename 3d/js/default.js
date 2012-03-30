@@ -4,7 +4,7 @@
     var options = {};
     options.steps = {
         "asynchronous-javascript": {
-            x: -300, y: -600, scale: 5 },
+            x: -1300, y: -1300, scale: 5 },
         "why-asynchronous": {
             x: 3200, y: -1500, scale: 3 },
         "client-side": {
@@ -46,7 +46,7 @@
             x: 700, y: 2000, scale: 1.5 },
 
         "what-is-a-promise": {
-            x: 2800, y: 1000, scale: 4 },
+            x: 2800, y: 800, scale: 4 },
         "promise": {
             x: 2200, y: 1650, scale: 1.5 },
         "attaching-observers": {
