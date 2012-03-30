@@ -138,449 +138,318 @@
     </ul>
   </div>
 
-  <div id="it-can-be-done-better-than-that" class="step smaller">
+  <div id="it-can-be-done-better-than-that" class="step">
     <h3>AC_BVT 自动化技术分析</h3>
     <p class="substep"><b>ATT框架：关键字驱动，便于开发与维护，ATM平台，便于管理与结果分析</b></p>
-    <p class="substep">Watir</p>
-    <p class="substep"><b>Patron</b></p>
-    <p class="substep">AutoIT</p>
-    <p class="substep"></p>
-    <p class="substep"><b></b></p>
+    <p class="substep"><a href="http://200.200.0.17/svn/ac-bvt/trunk/lib/mywatir.rb">Watir</a></p>
+    <p class="substep"><b><a href="http://200.200.0.17/svn/ac-bvt/trunk/lib/ac_login/patronclient.rb">Patron</a></b></p>
+    <p class="substep"><b><a href="http://200.200.0.17/svn/ac-bvt/trunk/lib/ac_sql.rb">Mysql</a></b></p>
+    <p class="substep"><b><a href="http://200.200.0.17/svn/ac-bvt/trunk/lib/process.rb">Win32API</a></b></p>
+    <p class="substep"><b><a href="http://200.200.0.17/svn/ac-bvt/trunk/lib/data_center/excel.rb">Excel操作</a></b></p>
   </div>
 
   <div id="deferred-promise" class="step">
-    <h2>Deferred / Promise</h2>
+    <h2>项目特点</h2>
+    <ul>
+      <li>模拟测试人员进行黑盒级测试</li>
+      <li>覆盖基本的BVT用例</li>
+    </ul>
   </div>
 
   <div id="what-is-deferred" class="step">
-    <h3 class="lone">What is Deferred ?</h3>
+    <h3 class="lone">模拟真实操作 vs 构造替换操作</h3>
+    <ul>
+      <li>真实 vs 准确</li>
+      <li>慢速 vs 快速</li>
+      <li>更依赖于环境 vs 更少依赖</li>
+    </ul>
   </div>
 
   <div id="deferred" class="step smaller">
-    <p>Deferred holds both <b>resolver</b> and <b>promise</b> objects</p>
-    <p style="text-align: center"><img src="deferred.png" /></p>
-    <p class="substep">Observers interested in value are attached to <b>promise</b> object</p>
-    <p class="substep">With <b>resolver</b> we resolve <b>promise</b> with actual value</p>
-    <p class="small substep">In some other implementations of deferred there is no distinction between deferred and a promise, it's the same object. In <a href="https://github.com/kriskowal/q">Q</a> and <a href="https://github.com/medikoo/deferred">deferred</a> it's different</p>
-    <p class="substep">In common usage <b>promise</b> is returned to the world and <b>resolver</b> is kept internally</p>
+    <p>目前角度，我们采用更多的是模拟真实用户操作：</p>
+    <li>Watir而不是patron</li>
+    <li>Win32API而不是让开发人员更快更准确提供接口</li>
   </div>
 
   <div id="deferred-example" class="step smaller">
-    <h3>Example</h3>
-    <p class="substep"><q><code>delay</code> function decorator. Decorates function so its execution is delayed in time</q></p>
-    <pre class="substep"><code style="font-size: 0.75em">var delay = function (fn, timeout) {
-  return function () {
-  <span class="substep">  var <mark>d = deferred()</mark>, self = this, args = arguments;</span>
-
-  <span class="substep">  setTimeout(function () {
-      <mark>d.resolve(fn.apply(self, args))</mark>;
-    }, timeout);</span>
-
-<span class="substep">    <mark>return d.promise</mark>;</span>
-  };
-};
-
-<span class="substep">var delayedAdd = delay(function (a, b) {
-    return a + b;
-}, 100);</span>
-
-<span class="substep">var result = delayedAdd(2, 3);
-deferred.isPromise(result); // true</span>
-
-<span class="substep">result.then(function (value) {
-  // Invoked after 100 milliseconds
-  console.log(value); // 5
-});</span></code></pre>
+    <h3>项目的结果</h3>
+    <p class="substep">ATM常跑用例400+</p>
+    <p class="substep">覆盖19个模块 作为后续AC_BVT扩展的基线</p>
+    <p class="substep">根据结果执行统计 ROI(投入产出比) 不低5倍以上</p>
+    <p style="text-align: center"><a href="http://200.200.0.17/svn/ac-bvt/trunk">项目地址</a></p>
   </div>
 
   <div id="what-is-a-promise" class="step">
-    <h3 class="lone">What is a Promise ?</h3>
+    <h3 class="lone">项目的改进</h3>
+    <p class="substep">框架的改进</p>
+    <p class="substep">开发效率的改进( 将开发过程逐步移交产品线, 不限于测试部 )</p>
+    <p class="substep">沟通成本与执行有效性改进</p>
   </div>
 
   <div id="promise" class="step">
-    <p style="text-align: center"><img src="littlecalculist.promises.png" /></p>
-    <p class="substep" style="text-align: center"><img src="kriskowal.promises.png" /></p>
-    <p class="substep">... ok, maybe let's try plain English ;)</p>
-    <p class="substep"><b>Promise is an object that represents eventual value which may already be available or is expected to be available in a future.</b></p>
-    <p class="substep"><b>Promise may succeed (fulfillment) or fail (rejection)</b></p>
-    <p class="substep"><b>Promise can be resolved only once</b></p>
+    <h3>WebUI自动化技术</h3>
   </div>
 
   <div id="attaching-observers" class="step">
-    <h3>Attaching observers</h3>
-    <pre class="substep"><code>promise.then(onsuccess, onerror);</code></pre>
-    <p class="substep"><b>Both callbacks are optional</b>. You can provide either <code>onsucess</code> or <code>onerror</code></p>
-    <p class="substep"><b>Callbacks are called only once (only either onsuccess or onerror is called)</b></p>
-    <div class="substep">
-      <p>In <a href="https://github.com/medikoo/deferred">deferred</a> implementation <code>promise</code> equals <code>promise.then</code> function, so you may use <code>promise</code> directly:</p>
-      <pre><code>console.log(promise === promise.then); // true
-promise(onsuccess, onerror);</code></pre>
-    </div>
+    <h3>SSLWeb自动化</h3>
+    <p class="substep">Watir</p>
+    <p class="substep">Selenium</p>
   </div>
 
   <div id="chaining-promises" class="step">
-    <h3>Chaining promises</h3>
-    <p class="substep">Promises by nature can be chained</p>
-    <div class="substep">
-      <p><b><code>promise</code> function returns another promise</b> which is resolved with a value returned by a callback function:</p>
-      <pre><code>delayedAdd(2, 3)(function (result) {
-  // result === 5
-  return result*result;
-})<span class="substep">(function (result) {
-  console.log(result); // 25
-});</span></code></pre>
-    </div>
+    <h3>项目特点</h3>
+    <ul>
+      <li>操作浏览器</li>
+      <li>检查点固定</li>
+      <li>后续有跨浏览器需求</li>
+    </ul>
   </div>
 
   <div id="chaining-promises-cont" class="step">
-    <p>If no callback for given flow (success or error) was given, then promise is resolved with input value:</p>
-    <pre><code>delayedAdd(2, 3)(null, function (err) {
-  // handle eventual error
-})(function (result) {
-  console.log(result); // 5
-});</code></pre>
-    <div class="substep">
-      <p>Instead of callbacks <b>you can also pass promise values to promise</b>:</p>
-      <pre><code>promise3 = promise1(promise2);
-// promise3 is resolved with the value of promise2 ...
-// ... when both promise1 and promise2 are resolved</code></pre>
-    </div>
+    <h3>Watir vs Selenium</h3>
+    <ul>
+      <li>IE version vs All</li>
+      <li>优雅 vs 过程</li>
+    </ul>
   </div>
 
   <div id="nesting-promises" class="step">
-    <h3>Nesting promises</h3>
+    <h3>项目选型</h3>
     <div class="substep">
-      <p>If a promise is resolved with another promise, it's not really resolved. <b>Promise is resolved only when the final promise is resolved with a real value:</b></p>
-      <pre><code>var d = deferred();
-d.resolve(delayedAdd(2, 3));
-d.promise(function (result) {
-  console.log(5); // 5;
-});</code></pre>
+      <p>起初使用了Watir</p><p>随着跨平台需求的要求, 对框架的熟悉, 切换到Selenium中</p>
     </div>
+    <p style="text-align:center;"><a href="http://200.200.0.35:81/svn/ssl_webserver/">项目地址</a></p>
   </div>
 
   <div id="error-handling" class="step">
-    <h3>Error handling</h3>
-    <p class="substep"><b>Errors in promises are handled in a separate flow</b></p>
+    <h3>项目分析</h3>
+    <p class="substep"><b>Selenium使用java来开发, 更成熟</b></p>
     <div class="substep">
-      <p><b>A promise resolved with an error (rejected) propagates its error to all promises that depend on this promise</b> (e.g. promises initiated by adding observers)</p>
-      <pre><code style="font-size: 0.8em">var error = new Error("Error");
-promise(function () {
-  // success flow
-  throw error; // caught by promise implementation
-})<span class="substep">(function () {
-  // never called
-})</span><span class="substep">(function () {
-  // never called
-}, function (e) {
-  console.log(e === error); // true
-  // handle error
-});</span></code></pre>
+      <p><b>与ruby的交互使用Rjb来处理</b></p>
+    </div>
+    <div class="substep">
+      <p><b>由liyang来分享一些经验</b></p>
     </div>
   </div>
 
   <div id="end" class="step smaller">
-    <p>When there's no error callback passed, eventual error is silent</p>
+    <h3>AC的GUI测试</h3>
     <div class="substep">
-      <p>To expose the error, end promise chain with <code>.end()</code>:</p>
-      <pre><code style="font-size: 0.8em">promise(function () {
-  throw new Error("Error"); // caught
-})(function () {
-  // never called
-}).end(); // Error is thrown</code></pre>
+      <p>Sikuli</p>
+      <pre><code style="font-size: 0.8em">
+          region = get_skype_region(hash[:current_user]
+          region.wait(friend_path, 3)
+          region.rightClick(friend_path, 0)
+          region.wait(File.join(image_path, "delete.png"), 3)
+          region.click(File.join(image_path, "delete.png"), 0)
+      </code></pre>
     </div>
-    <p class="substep"><strong>It's very important to end promise chains with <code>end</code> otherwise eventual errors that were not handled will not be exposed</strong></p>
-    <div class="substep">
-      <p>Errors can also be handled via <code>end</code> call:</p>
-      <pre><code style="font-size: 0.8em">promise(function () {
-  // ...
-}).end(function(err) {
-  // handle error
-});</code></pre>
-    </div>
+    <p class="substep">是一种终极的方法, 直观方便使用, 但不易跨平台, 稳定性不够好</p>
   </div>
 
   <div id="promisify" class="step">
-    <h3>Working with Node.js callback style functions</h3>
-    <p class="substep">It's not convienient to work with both promises and callback style functions</p>
-    <p class="substep">When you decide to build your flow with promises <b>don't mix both concepts just <i>promisify</i> asynchronous functions</b> so they return promises instead.</p>
+    <h3>AC的GUI测试( 2 )</h3>
+    <p class="substep">AutoIT</p>
     <div class="substep">
-      <p>Do that with <b><code>deferred.promisify</code></b>:</p>
-      <pre><code>var readFile = deferred.promisify(fs.readFile);
-readFile(filename, 'utf-8')(function (content) {
-  // process content
-}).end();</code></pre>
+      <p>创建一个OLE对象 <b><code>ai = WIN32OLE.new('autoitx3.control')</code></b>:</p>
+      <pre><code>
+        ai.WinWait("标题")
+        ai.ControlClick('标题','','Button')
+        ai.ControlSetText('标题', '', 'Text')
+      </code></pre>
     </div>
+    <p class="substep">比较稳定可靠, 但一般只针对标准控件, 与sikuli和watir结合, 基本可以轻松完成GUI的自动化测试</p>
   </div>
   <div id="promisify-cont" class="step">
-    <p><code>deferred.promisify</code> also takes care of input arguments. <b>It makes sure that all arguments that are to be passed to asynchronous function are first resolved</b>.</p>
+    <h3>项目结果与改进</h3>
     <div class="substep">
-      <p>So we can write constructs like this:</p>
-      <pre><code>var readFile = deferred.promisify(fs.readFile)
-  , writeFile = deferred.promisify(fs.writeFile);
-
-writeFile(filename + '.copy',
-  readFile(filename, 'utf-8')).end();</code></pre>
+      <p>包括审计自动化在内的GUI自动化, 基本完成需求</p>
     </div>
-    <p class="small substep"><i>but keep in mind it's not best real world example, don't copy files that way, use <code>fs.createReadStream</code> instead</i></p>
+    <p class="small substep">稳定性还稍欠佳</p>
+    <ul>
+      <li>能不用GUI自动化就不用</li>
+      <li>使用时少一些依赖, 多一些自动化设置</li>
+      <li>失败截图是必备</li>
+      <li>单元测试是关键, 尤其在外网测试时验证不断的网页改动</li>
+    </ul>
   </div>
 
   <div id="grouping-promises" class="step">
-    <h3>Grouping promises</h3>
-    <p class="substep">Sometimes we're interested in results of more than one promise object</p>
-    <div class="substep">
-      <p>We can help us again with a deferred function:</p>
-      <pre><code>deferred(delayedAdd(2, 3), delayedAdd(3, 5),delayedAdd(1, 7))(
-    function (result) {
-        console.log(result); // [5, 8, 8]
-    }
-);</code></pre>
+    <h3>Apm2.0BVT</h3>
+    <p class="substep">Orcale数据库连接</p>
+    <div class="substep"><a href="https://github.com/kubo/ruby-oci8">ruby-oci8</a>
+      <pre><code>
+class OraclePool
+  @@instance = nil
+  def self.connection
+    @@instance = self.new(ATT::DataMap['oracle_user'],ATT::DataMap['oracle_pass'],ATT::DataMap['oracle_ip'],ATT::DataMap['oracle_port'],ATT::DataMap['server_name']) if @@instance.nil?
+    @@instance.connection
+  end
+
+  def initialize(user,pass,ip,port,server_name)
+    @oracle_str = "(DESCRIPTION = (ADDRESS = (PROTOCOL = TCP)(HOST = #{ip})(PORT = #{port})) (CONNECT_DATA =(SERVER = DEDICATED)(SERVICE_NAME = #{server_name})))"
+    @user = user
+    @pass = pass
+    @connect = nil
+  end
+
+  def connection
+    @connect = connect() if @connect.nil?
+    @connect
+  end
+
+  def connect
+    OCI8.new(@user,@pass,@oracle_str)
+  end
+end</code></pre>
     </div>
   </div>
 
   <div id="processing-collections" class="step smaller">
-    <h3>Processing collections</h3>
+    <h3><a href="https://github.com/toland/patron">Patron</a></h3>
     <div class="substep">
-      <p>There is promise aware Array's <code>map</code>:</p>
-      <pre><code>deferred.map(filenames, readFile)(function (result) {
-  // result is an array of files content
-});</code></pre>
-    </div>
-    <p class="substep">If any call of <code>readFile</code> ends with an error, then promise returned by <code>deferred.map</code> is immediately rejected with that error</p>
-    <div class="substep">
-      <p>There's also promise aware Array's <code>reduce</code>:</p>
-      <pre><code>deferred.reduce([delayedAdd(2, 3), delayedAdd(3, 5), delayedAdd(1, 7)],
-  function (a, b) {
-    return delayedAdd(a, b);
-  })(function (result) {
-  console.log(result); // 21
-});</code></pre>
+      <p>依托于curllib构建起来, 轻巧的API, session管理, 可以认为是一个快速稳定的浏览器</p>
+      <pre><code>
+    sess = Patron::Session.new
+    sess.timeout = 10
+    sess.base_url = "http://myserver.com:9900"
+    sess.headers['User-Agent'] = 'myapp/1.0'
+    #现在可以直接使用sess.post(url, data)来发送数据了
+    res = sess.get('/browse')
+    puts res.body
+    res = sess.post('/add_user', :name=>"test", :pass=>"test")
+    puts res.status
+    </code></pre>
     </div>
   </div>
 
   <div id="promise-extensions" class="step">
-    <h3>Promise extensions</h3>
-    <p class="substep">In <a href="https://github.com/medikoo/deferred">deferred</a> promises are equipped with some useful extensions:</p>
-    <h4 class="substep"><code>map</code> & <code>reduce</code></h4>
+    <h3>项目收获与改进</h3>
+    <p class="substep">开发速度快 执行速度快</p>
+    <p class="substep">技术选型稳定可靠</p>
+    <h3>改进点</h3>
     <div class="substep">
-      <p>Promise aware Array's methods that would be executed on resolved value</p>
-      <pre><code>readdir(directory).map(readFile)(function (result) {
-  // result is an array of directory files content
-});</code></pre>
+      <ul>
+        <li>与其他项目比, 更需要得到开发的接口支持</li>
+        <li>可以更前期进行</li>
+        <li>可以让开发进行2次开发</li>
+      </ul>
     </div>
   </div>
 
   <div id="invoke" class="step">
-    <h4><code>invoke</code></h4>
+    <h4><code>自动化测试框架的演进</code></h4>
     <div class="substep">
-      <p>Invokes function (with pregiven arguments) on resolved value.</p>
-      <pre><code>promise = deferred({ foo: function (arg) { return arg*arg }});
-promise.invoke('foo', 3)(function (result) {
-  console.log(result); // 9
-});</code></pre>
+      <p>脚本开发模式 -></p>
     </div>
     <div class="substep">
-      <p>It works also with asynchronous functions:</p>
-      <pre><code>promise = deferred({ foo: function (arg, callback) {
-  setTimeout(function () {
-    callback(null, arg*arg);
-  }, 100);
-} });
-promise.invoke('foo', 3)(function (result) {
-  console.log(result); // 9
-});</code></pre>
+      <p>数据驱动模式 -></p>
     </div>
+    <div class="substep">
+      <p>关键字驱动模式 -></p>
+    </div>
+    <div class="substep">
+      <p>大规模高效复用关键字驱动模式 -></p>
+    </div>
+
   </div>
 
   <div id="match" class="step">
-    <h4><code>match</code></h4>
+    <h4><code>框架产生的原因</code></h4>
     <div class="substep">
-      <p>Matches resolved list into function arguments</p>
-      <pre><code>var promise = deferred([2, 3]);
-promise.match(function (a, b) {
-  console.log(a + b); // 5
-});</code></pre>
+      <p>每次繁锁的结果收集与分析管理</p>
     </div>
-    <p class="substep">For more extensions see documentation at <a href="https://github.com/medikoo/deferred">github.com/medikoo/deferred</a></p>
-    <p class="substep"><b>You can also freely extend <a href="https://github.com/medikoo/deferred">deferred</a> with your own extensions</b></p>
+    <p class="substep">Excel表格管理的脚本和用例像意大利面条一样</p>
+    <p class="substep">提供多台测试设备支持</p>
+    <p class="substep">剥离基本的公共操作</p>
+    <p class="substep">提供复用其他项目的需求(下一阶段进行)</p>
   </div>
 
   <div id="example-promises" class="step">
-    <p>We've been introduced to promises. Let's look back at our Node.js example</p>
-    <div class="abs-box">
-      <pre class="base substep hide-on-notsupported" data-order="0" style="font-size:0.3em;"><code>// Read all filenames in given path
-readdir(dirname, function (err, filenames) {
-  var result, waiting;
-  if (err) {
-    // Handle eventual error
-    return;
-  }
-  // Filter *.js filenames
-  filenames = files.filter(function (filename) {
-    return (filename.slice(-3) === '.js') && (filename !== 'lib.js');
-  });
-  // Read content of each file
-  waiting = 0;
-  result = [];
-  filenames.forEach(function (filename, index) {
-    ++waiting;
-    readFile(filename, 'utf8', function (err, content) {
-      if (err) {
-        // Handle eventual error
-        return;
-      }
-      result[index] = content;
-      if (!--waiting) {
-        // Got content of all files, concatenate and write into lib.js
-        writeFile(dirname + '/lib.js', result.join("\n"), function (err) {
-          if (err) {
-            // Handle eventual error
-            return;
-          }
-        });
-      }
-    });
-  });
-});</code></pre>
-      <div class="substep keep" data-order="1">
-        <p>With promises we can write it nearly same way as wrote it initially:</p>
-        <pre><code style="font-size: 0.8em"><span class="substep" data-order="6">writeFile(dirname + '/lib.js',</span>
-<span class="substep" data-order="2">  // Read all filenames in given path
-  readdir(dirname)</span>
-<span class="substep" data-order="3">  // Filter *.js filenames
-  .invoke('filter', function (filename) {
-    return (filename.slice(-3) === '.js')
-      && (filename !== 'lib.js');
-  })</span>
-<span class="substep" data-order="4">  // Read content of each file
-  .map(function (filename) {
-    return readFile(filename, 'utf-8');
-  })</span>
-<span class="substep" data-order="5">  // Concatenate into one string
-  .invoke('join', '\n')</span>
-<span class="substep" data-order="6">)</span><span class="substep" data-order="7">.end(function (err) {
-  // handle eventual error
-});</span></code></pre>
-      </div>
+    <h3>ATT &nbsp; ATM</h3>
+    <div class="substep">是一套完整的功能自动化测试框架</div>
+    <div class="substep">支持关键字驱动与数据驱动</div>
+    <div class="substep">B/S架构, 基本采用Ruby与Rails开发</div>
+    <div class="substep">现有自动化项目基本都采用了该平台, 目前正在开发3.0版本, 以大幅提高运行速度与易用性</div>
+    <div class="substep">目标是成为公司乃至国内领先的自动化测试平台</div>
+    <div style="text-align:right;">
+      <a href="http://200.200.0.17/cms/supesite/batch.view.php?aid=2241">ATT&nbsp;ATM介绍(click me)</a>
     </div>
   </div>
 
   <div id="future" class="step smaller">
-    <h3>What future standards have to offer ?</h3>
-    <p class="substep">Currently there are no plans for promise implementation in Harmony</p>
-    <p class="substep"><b>What's interesting we can find promises in Dart</b></p>
-    <p class="substep">However its API is not as versatile and largly differs form what was introduced here</p>
-    <ul>
-      <li class="substep">Instead of two possible resolution states there are three: completed, cancelled & failed</li>
-      <li class="substep">You need to use three different methods to attach observers</li>
-      <li class="substep">If promise is resolved with another promise, you need to run <code>flatten</code> to get final real value</li>
-      <li class="substep">Different approach to grouping promises (join and waitFor methods)</li>
-    </ul>
-    <p class="substep">See Dart spec for more info on that: <a href="http://api.dartlang.org/dart_core/Promise.html">http://api.dartlang.org/dart_core/Promise.html</a></p>
-    <p class="substep">Let's see what <b>real</b> future has to offer...</p>
+    <h3>更多资料... </h3>
+    <p class="substep">资源会迁移至交流平台的wiki中, 也欢迎大家参与建设领先的自动化交流环境: <a href="http://200.200.0.35/wiki">Wiki</a></p>
+    <p class="substep">上手资料:  \\200.200.195.250\测试中心文件服务器\06-培训学习资料\新员工快速上手包20110601\业务知识\att </p>
   </div>
 
   <div id="coroutines" class="step smaller">
-    <h3>Harmony</h3>
-    <p>There are no promises but is there anything else that can help us with asynchronous programming ?</p>
-    <h3 class="substep">Coroutines</h3>
-    <div class="substep">
-      <p>They would help with callback style, as instead of:</p>
-      <pre><code>readFile(filename, function (err, content) {
-  // ..
-});</code></pre>
-    </div>
-    <div class="substep">
-      <p>It would be possible to keep flow in current scope:</p>
-      <pre><code>[err, content] = yield readFile(filename);
-if (err) {
-  // handle error
-  return;
-}
-// process content</code></pre>
-    </div>
-    <p class="substep"><b>This however won't work well with promises<br />(what about error path?)</b></p>
+    <h3>现在, 什么是自动化技术 ?</h3>
+    <ul>
+    <li><p>一系列开发与测试技术的集合</p></li>
+    <li><p>只有更合适, 没有最好的</p></li>
+    <li><p>效益至上, 可维护性至上</p></li>
+    </ul>
   </div>
 
   <div id="proxies" class="step">
-    <h3>Proxies</h3>
-    <p class="substep">Proxies are very powerful</p>
-    <p class="substep"><b>With proxies we can proxy property names onto resolved promise values</b></p>
+    <h3 class="substep">更多自动化技术</h3>
     <div class="substep">
-      <p>So instead of:</p>
-      <pre><code>promise.invoke('foo', arg);</code></pre>
+      <p><a href="http://code.google.com/p/robotium/">Robotium</a></p>
+      <pre><code>
+packagecom.liliandroid.helloworld.test;
+importandroid.test.ActivityInstrumentationTestCase2;
+ 
+importcom.liliandroid.helloworld.ActivityMain;
+importcom.jayway.android.robotium.solo.Solo;
+ 
+publicclassUITextTestextendsActivityInstrumentationTestCase2<ActivityMain>{
+      privateSolosolo;
+      publicUITextTest() {
+          super("com.liliandroid.helloworld", ActivityMain.class);
+          }
+      publicvoidsetUp()throwsException {
+          solo=newSolo(getInstrumentation(), getActivity());
+             }
+      publicvoidtestUI()throwsException {
+          booleanexpected =true;
+          booleanactual =solo.searchText("This") &&solo.searchText("is");
+           assertEquals("This and/or is are not found", expected, actual);
+      } }
+      </code></pre>
     </div>
-    <div class="substep">
-      <p>We would be able to write:</p>
-      <pre><code>promise.foo(arg);</code></pre>
-    </div>
-    <p class="substep"><b>With internal support from promise implementation this would work</b></p>
   </div>
 
   <div id="example-proxies" class="step">
-    <p>Let's improve our example with proxies.</p>
-    <div class="abs-box">
-      <div class="substep hide-on-notsupported">
-        <p style="margin-top:0; visibility: hidden">It's basically same as our first "synchronous" version:</p>
-        <pre><code>writeFile(dirname + '/lib.js',
-  // Read all filenames in given path
-  readdir(dirname)
-  // Filter *.js filenames
-  .invoke('filter', function (filename) {
-    return (filename.slice(-3) === '.js')
-      && (filename !== 'lib.js');
-  })
-  // Read content of each file
-  .map(function (filename) {
-    return readFile(filename, 'utf-8');
-  })
-  // Concatenate into one string
-  .invoke('join', '\n')
-).end(function (err) {
-  // handle eventual error
-});</code></pre>
-      </div>
-      <div class="substep base">
-        <p>It's basically same as our first "synchronous" version:</p>
-    <pre><code>writeFile(dirname + '/lib.js',
-  // Read all filenames in given path
-  readdir(dirname)
-  // Filter *.js filenames
-  .filter(function (filename) {
-    return (filename.slice(-3) === '.js')
-      && (filename !== 'lib.js');
-  })
-  // Read content of each file
-  .map(<mark>function (filename) {
-    return readFile(filename, 'utf-8');
-  }</mark>)
-  // Concatenate into one string
-  .join('\n')
-)<mark>.end(function (err) {
-  // handle eventual error
-})</mark>;</code></pre>
-      </div>
-    </div>
+    <p>接下来...</p>
+    <p> 大家的参与</p>
+      <ul><li>创建你的项目</li><li>研究属于你的自动化技术</li><li>改进研发现状</li></ul>
+      <div class="contact"><a href="http://200.200.0.35:88/wiki/where-to-begin-att">Now, Get it!</a></div>
+  </div>
+  <div id="buiding" class="step">
+      <p> 框架与平台的建设</p>
+      <ul>
+        <li>更快</li><li>更稳定</li><li>更简单灵活</li>
+      </ul>
+      <div>ATM3.0正在紧张开发中...</div>
   </div>
 
   <div id="questions" class="step">
-    <h2>Questions ?</h2>
+    <h2>问题 ?</h2>
   </div>
 
   <div id="thank-you" class="step final">
-    <h2>Thank you !</h2>
+    <h2>谢谢 !</h2>
 
-    <p class="name">Mariusz Nowak</p>
-    <p class="email"><a href="mailto:mariusz@medikoo.com">mariusz@medikoo.com</a></p>
-    <p class="twitter p-a"><a href="https://twitter.com/medikoo"><img src="twitter.png" /> @medikoo</a></p>
-    <p class="github p-a"><a href="https://github.com/medikoo"><img src="github.png" /> github.com/medikoo</a></p>
-    <p class="deferred p-a"><a href="https://github.com/medikoo/deferred">github.com/medikoo/deferred</a><br />
-<b>npm install deferred</b></p>
+    <p class="name">WinDy(风一样的男子)</p>
+    <p class="email"><a href="mailto:lyfi2003@gmail.com">lyfi2003@gmail.com</a></p>
+    <p class="blog"><a href="http://windy.github.com">访问我的极客中心</a></p>
+    <p class="smaller"><a href="http://200.200.0.35:88">由ATT团队贡献技术和方案</a></p>
 
   </div>
 
   <div id="overview" class="step" data-x="3400" data-y="2000" data-scale="10"></div>
-  <div class="hint"><p>Use a spacebar or arrow keys to navigate</p></div>
+  <div class="hint"><p>使用方向键来控制</p></div>
 </div>
 
 <div id="timer"></div>
