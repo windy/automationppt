@@ -43,10 +43,10 @@
         "deferred": {
             x: -800, y: 2000, scale: 1.5 },
         "deferred-example": {
-            x: 700, y: 2000, scale: 1.5 },
+            x: 700, y: 8000, scale: 1.5 },
 
         "what-is-a-promise": {
-            x: 2800, y: 800, scale: 4 },
+            x: 2800, y: 800, z: -5000, scale: 4 },
         "promise": {
             x: 2200, y: 1650, scale: 1.5 },
         "attaching-observers": {
