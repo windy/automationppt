@@ -89,8 +89,11 @@
         "example-proxies": {
             x: 7500, y: 4650, scale: 1.5 },
 
+        "building": {
+          x:7500, y:3000, scale: 1.5 
+          },
         "questions": {
-            x: 8000, y: 2000, rotate: { y: 65, z: -90 }, scale: 5 },
+            x: 8000, y: 2000, scale: 5 },
 
         "thank-you": {
             x: 6400, y: 1600, scale: 5 }
